@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <style>
+        body {
+            background-color: #262261;
+            color: white;
+        }
+        #ageMessage {
+            color: red;
+        }
+        #successMessage {
+            color: green;
+        }
+    </style>
+    <script>
+        function validateAge(event) {
+            event.preventDefault();
+            const birthdate = document.getElementById('birthdate').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const ageMessage = document.getElementById('ageMessage');
+            const successMessage = document.getElementById('successMessage');
+
+            if (!birthdate) {
+                ageMessage.textContent = "Please enter your birthdate.";
+                successMessage.textContent = "";
+                return;
+            }
+
+            const birthDateObj = new Date(birthdate);
+            const today = new Date();
+            let age = today.getFullYear() - birthDateObj.getFullYear();
+            const monthDiff = today.getMonth() - birthDateObj.getMonth();
+            const dayDiff = today.getDate() - birthDateObj.getDate();
+
+            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                age--;
+            }
+
+            if (age < 21) {
+                ageMessage.textContent = "You are not of age. You must be 21 or older to register.";
+                successMessage.textContent = "";
+            } else {
+                if (password !== confirmPassword) {
+                    ageMessage.textContent = "Passwords do not match.";
+                    successMessage.textContent = "";
+                } else {
+                    ageMessage.textContent = '';
+                    successMessage.textContent = "Registration is successful!";
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <form id="frmExample" name="frmExample" onsubmit="validateAge(event)">
+        <h1>Registration Form</h1>
+        Full name:
+        <input type="text" name="name" size="25" maxlength="45" required placeholder="Enter your name"/>
+        <br/><br/>
+        Gender:<br>
+        <input type="radio" name="Gender" value="Male" checked>Male<br>
+        <input type="radio" name="Gender" value="Female">Female<br>
+        <input type="radio" name="Gender" value="Others">Others<br>
+        <input type="radio" name="Gender" value="secret">Prefer not to say<br>
+        <br/><br/>
+        Email:
+        <input name="email" type="email" required/>
+        <br/><br/>
+        Phone:
+        <input name="phone" type="number" required/>
+        <br/><br/>
+        Birthdate:
+        <input type="date" id="birthdate" name="birthdate" required>
+        <br/><br/>
+        Password:
+        <input type="password" id="password" name="password" required>
+        <br/><br/>
+        Confirm Password:
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <br/><br/>
+        <input type="submit" value="Register your details">
+        <br/><br/>
+        <p id="ageMessage"></p>
+        <p id="successMessage"></p>
+        <p><a href="homepage.html" title="Back" style="color: white;">Back</a> to homepage.</p>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

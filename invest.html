@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Investments</title>
+    <style>
+        body {
+            background-color: #262261; /* Light blue background color */
+            color: white; /* White text color for better contrast */
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.75); /* Lighter text color for navbar links */
+        }
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: white; /* White text color on hover for navbar links */
+        }
+        .short-image {
+            max-height: 300px;
+            object-fit: cover;
+        }
+        .chatbot-message {
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            background-color: white; /* Slightly lighter blue for chatbot messages */
+            color: black;
+        }
+        .bot {
+            text-align: left;
+        }
+        /* Styling for cards with a gradient background, no border, and rounded corners */
+        .card {
+            background: linear-gradient(to bottom right, #f8f4f4, #bdb7b7);
+            border: none;
+            border-radius: 25px;
+        }
+        /* Custom button styling with a gradient background and white text color */
+        .btn-custom {
+            background: linear-gradient(to bottom right, #393f1c, #c5c5c3);
+            color: #ffffff;
+        }
+        /* Flexbox styling for crypto stats section */
+        .crypto-stats {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        /* Maximum width for images in the crypto stats section */
+        .crypto-stats img {
+            max-width: 100%;
+        }
+        /* Styling for the TradingView widget container */
+        .tradingview-widget-container {
+            width: 100%;
+            height: 600px;
+        }
+        /* Full width and height for the TradingView chart */
+        #tradingview_chart {
+            width: 100%;
+            height: 100%;
+        }
+        p {
+            color: black;
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link"><b>FlexiFinance</b></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="invoices.html">Invoice</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="expenses.html">Expenses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="invest.html">Investments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="wallet.html">Wallet</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <button class="btn btn-primary" onclick="signOut()">Sign Out</button>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="registeracc.html">Bank accounts</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container mt-5">
+        <div class="text-center my-5">
+            <h3>Crypto Statistics</h3>
+        </div>
+ 
+        <div class="card p-3 my-5 crypto-stats">
+            <div class="tradingview-widget-container">
+                <div id="tradingview_chart"></div>
+            </div>
+            <p>Stay updated with the latest trends and statistics in the cryptocurrency market. Monitor your investments in real-time and make informed decisions. Cryptocurrency markets can be highly volatile and staying informed is crucial for maximizing potential gains while minimizing risks. Our platform provides comprehensive data and analytics to help you stay ahead of the curve.</p>
+        </div>
+    </div>
+ 
+    <div id="chatbot" class="container mt-4">
+        <h5>Investing Tips</h5>
+        <div id="chatbot-messages"></div>
+        <button id="generateTipBtn" class="btn btn-primary mt-3">Generate Tip</button>
+        <button id="clearChatBtn" class="btn btn-danger mt-3">Clear Chat</button>
+    </div>
+
+    <script>
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const generateTipBtn = document.getElementById('generateTipBtn');
+        const clearChatBtn = document.getElementById('clearChatBtn');
+    
+        let originalTips = [
+            'Diversifying your investment portfolio can help reduce risk.',
+            'Always do thorough research before making any investment decisions.',
+            'Investing for the long term can help smooth out market fluctuations.',
+            'Consider starting with index funds or ETFs for a diversified exposure.',
+            'Set clear investment goals to guide your decisions and track your progress.',
+            'Continuously educate yourself about investing to make informed decisions.',
+            'Don\'t try to time the market; instead, focus on long-term trends.',
+            'Avoid emotional decisions; stick to your investment plan.',
+            'Consider dollar-cost averaging to reduce the impact of market volatility.',
+            'Regularly review and adjust your investment portfolio based on your goals and market conditions.'
+        ];
+    
+        let tips = [...originalTips];
+    
+        generateTipBtn.addEventListener('click', function() {
+            if (tips.length === 0) {
+                tips = [...originalTips];
+                chatbotMessages.innerHTML = ''; // Clear previous messages
+            }
+    
+            const randomIndex = Math.floor(Math.random() * tips.length);
+            const tip = tips.splice(randomIndex, 1)[0];
+            addMessage('bot', tip);
+        });
+    
+        clearChatBtn.addEventListener('click', function() {
+            chatbotMessages.innerHTML = '';
+            tips = [...originalTips]; // Reset tips array
+        });
+    
+        function addMessage(sender, message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chatbot-message', sender);
+            messageDiv.textContent = message;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+    </script>
+    <script>
+        function signOut() {
+            window.location.href = 'signin.html';
+        }
+    </script>
+    <!-- Including necessary scripts for jQuery, Popper.js, and Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Including TradingView script for the chart widget -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    <script type="text/javascript">
+        /* Initializing the TradingView widget */
+        new TradingView.widget(
+            {
+                "width": "100%",
+                "height": 580,
+                "symbol": "BITSTAMP:BTCUSD",
+                "interval": "D",
+                "timezone": "Etc/UTC",
+                "theme": "dark",
+                "style": "1",
+                "locale": "en",
+                "toolbar_bg": "#262261",
+                "enable_publishing": false,
+                "withdateranges": true,
+                "hide_side_toolbar": false,
+                "allow_symbol_change": true,
+                "details": true,
+                "hotlist": true,
+                "calendar": true,
+                "news": [
+                    "headlines"
+                ],
+                "container_id": "tradingview_chart"
+            }
+        );
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    
+    <title>Homepage</title>
+    <style>
+        body {
+            background-color: #262261; /* Set the background color */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            color: white; /* Set text color to white */
+        }
+        .top-section {
+            height: 200px;
+            margin-bottom: 0;
+            margin-top: 20px;
+            padding-top: 0;
+            padding-left: 20px;
+        }
+        .highlight-section {
+            padding: 80px;
+            font-size: 1.2em;
+        }
+        .text-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .left-aligned {
+            max-width: 800px;
+            margin: 0 auto 0 0;
+            padding-left: 20px;
+        }
+        /* Adjust carousel item height */
+        #myCarousel .carousel-item {
+            height: 400px; /* Adjust this value to increase the height */
+        }
+        /* Center images vertically */
+        #myCarousel .carousel-item img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+        }
+        .navbar, .nav-link, .btn {
+            color: white !important;
+        }
+        .para-container {
+            margin-top: 50px;
+            margin-bottom: 50px;
+            margin-left: 50px;
+            font-size: 1.2em;
+        }
+        /* Add border-radius to social media images */
+        .para-container img {
+            border-radius: 8px; /* Adjust the radius as needed */
+            width: 50px; /* Set a width for consistency */
+            height: 50px; /* Set a height for consistency */
+            object-fit: cover; /* Ensure images cover the space */
+        }
+        /* Adjust spacing between images */
+        .para-container ul {
+            list-style: none;
+            padding: 0;
+        }
+        .para-container li {
+            display: inline;
+            margin-right: 10px; /* Adjust spacing between icons */
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link"><b>C369</b></a>
+            </li>
+        </ul>
+        <div class="ms-auto">
+            <a href="signin.html" class="btn btn-primary me-2">Sign in</a>
+            <a href="Signup.html" class="btn btn-primary">Sign up</a>
+        </div>
+    </div>
+</nav>
+
+<div class="top-section">
+    <h1>FlexiFinance</h1>
+    <p>A financial technology platform that will change the lives of many!</p>
+</div>
+
+<!-- Carousel -->
+<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></li>
+        <li data-bs-target="#myCarousel" data-bs-slide-to="1"></li>
+        <li data-bs-target="#myCarousel" data-bs-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://i.pinimg.com/736x/86/91/21/86912114d94ba2d5880ec926da1eda57.jpg" class="d-block" alt="">
+        </div>
+        <div class="carousel-item">
+            <img src="https://cloudinary.hbs.edu/hbsit/image/upload/s--YvTQW8XL--/f_auto,c_fill,h_375,w_750,/v20200101/9DD1E295483AB53C37A95A0D4BFE6F5D.jpg" class="d-block" alt="Investing!">
+        </div>
+        <div class="carousel-item">
+            <img src="https://cdn.educba.com/academy/wp-content/uploads/2015/12/budgeting.jpg" class="d-block" alt="Budgeting!">
+        </div>
+    </div>
+
+    <!-- Left and right controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<div class="para-container">
+<p>Effective financial management is crucial but often difficult, especially with tasks like client invoicing, payment tracking, and tax planning. These issues can lead to inefficiencies and late payments, disrupting financial stability.</p>
+<br></br>
+<p>Explore our website for tools and resources that make managing your finances, invoicing clients, and tracking payments a breeze.</p>
+<br></br>
+<h4>Connect with us on Social Media!</h4>
+<p>Follow me on social media for updates and more:</p>
+    <ul>
+      <li><a href="https://twitter.com"><img src="twitter.jpg" alt="Twitter" /></a></li>
+      <li><a href="https://www.facebook.com/"><img src="fb.jpg" alt="Facebook" /></a></li>
+      <li><a href="https://www.instagram.com/republicpoly.soi/"><img src="instagram.jpg" alt="Instagram" /></a></li>
+    </ul>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

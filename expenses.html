@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Expenses</title>
+    <style>
+    body {
+        background-color: #262261;
+    }
+    .navbar-dark .navbar-nav .nav-link {
+        color: rgba(255, 255, 255, 0.75); /* Lighter text color for navbar links */
+    }
+    .navbar-dark .navbar-nav .nav-link:hover {
+        color: white; /* White text color on hover for navbar links */
+    }
+    #expenseChart {
+        max-width: 400px;
+        max-height: 400px;
+        margin: auto;
+    }
+    #chatbot {
+        border: 1px solid #ccc;
+        padding: 10px;
+        max-width: 400px;
+        margin: 20px auto;
+        background-color: white; /* White background for chatbot */
+        color: black; /* Black text for chatbot */
+    }
+    #chatbot-messages {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .chatbot-message {
+        margin-bottom: 10px;
+    }
+    .chatbot-message.user {
+        text-align: right;
+    }
+    .chatbot-message.bot {
+        text-align: left;
+    }
+    .container {
+        color: white; /* Ensure form text is white for readability */
+    }
+    .form-control {
+        background-color: white; /* White background for form inputs */
+        color: black; /* Black text for form inputs */
+    }
+    .btn-primary {
+        background-color: #0056b3; /* Slightly darker blue for buttons */
+    }
+    .alert-secondary {
+        background-color: #e2e3e5; /* Light background for alerts */
+        color: black; /* Black text for alerts */
+    }
+</style>
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link"><b>FlexiFinance</b></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="invoices.html">Invoice</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="expenses.html">Expenses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="invest.html">Investments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="wallet.html">Wallet</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <button class="btn btn-primary" onclick="signOut()">Sign Out</button>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="registeracc.html">Bank accounts</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Main container -->
+    <div class="container mt-4">
+        <h2>Enter Your Budget and Expense Details</h2>
+        <form id="budgetForm">
+            <div class="mb-3">
+                <label for="budgetAmount" class="form-label">Monthly Budget ($)</label>
+                <input type="number" class="form-control" id="budgetAmount" placeholder="Enter your monthly budget" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Set Budget</button>
+        </form>
+
+        <!-- Expense form -->
+        <form id="expenseForm" class="mt-3">
+            <div class="mb-3">
+                <label for="expenseItem" class="form-label">Expense Item</label>
+                <input type="text" class="form-control" id="expenseItem" placeholder="What did you spend on?" required>
+            </div>
+            <div class="mb-3">
+                <label for="expenseAmount" class="form-label">Amount Spent ($)</label>
+                <input type="number" class="form-control" id="expenseAmount" placeholder="How much did you spend?" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <!-- Expense list and chart -->
+        <div id="expenseList" class="mt-4"></div>
+        <div class="mt-4">
+            <canvas id="expenseChart"></canvas>
+        </div>
+
+        <!-- Chatbot section -->
+        <div id="chatbot" class="mt-4">
+            <h5>Chatbot Tips</h5>
+            <div id="chatbot-messages"></div>
+            <form id="chatbotForm">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="chatbotInput" placeholder="Ask for a tip..." required>
+                    <button class="btn btn-primary" type="submit">Send</button>
+                </div>
+            </form>
+            <button id="clearChatBtn" class="btn btn-danger mt-3">Clear Chat</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to handle sign out
+        function signOut() {
+            window.location.href = 'signin.html';
+        }
+    </script>
+</body>
+</html>
+
+
+    <script>
+        // Selecting elements and initializing variables
+        const budgetForm = document.getElementById('budgetForm');
+        const expenseForm = document.getElementById('expenseForm');
+        const expenseList = document.getElementById('expenseList');
+        const expenseChartCanvas = document.getElementById('expenseChart');
+        let monthlyBudget = 0;
+        let expenseData = {
+            labels: [],
+            datasets: [{
+                label: 'Expenses',
+                data: [],
+                backgroundColor: []
+            }]
+        };
+        // Initializing the pie chart
+        const expenseChart = new Chart(expenseChartCanvas, {
+            type: 'pie',
+            data: expenseData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                }
+            }
+        });
+        // Event listener for the budget form
+        budgetForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            monthlyBudget = parseFloat(document.getElementById('budgetAmount').value);
+            addMessage('bot', `Your monthly budget is set to $${monthlyBudget}. Start adding your expenses.`);
+            budgetForm.reset();
+        });
+        // Event listener for the expense form
+        expenseForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const item = document.getElementById('expenseItem').value;
+            const amount = parseFloat(document.getElementById('expenseAmount').value);
+
+            // Add new expense entry to the list
+            const expenseEntry = document.createElement('div');
+            expenseEntry.classList.add('alert', 'alert-secondary', 'd-flex', 'justify-content-between', 'align-items-center');
+            expenseEntry.textContent = `Expense: ${item}, Amount: $${amount}`;
+            
+            // Create a button to remove the expense entry
+            const removeButton = document.createElement('button');
+            removeButton.classList.add('btn', 'btn-danger', 'btn-sm');
+            removeButton.textContent = 'Remove';
+            removeButton.addEventListener('click', function() {
+                removeExpense(item);
+                expenseEntry.remove();
+            });
+            
+            expenseEntry.appendChild(removeButton);
+            expenseList.appendChild(expenseEntry);
+
+            // Add new expense data to the chart
+            expenseData.labels.push(item);
+            expenseData.datasets[0].data.push(amount);
+            expenseData.datasets[0].backgroundColor.push(getUniqueColor());
+            expenseChart.update();
+
+            // Check budget
+            checkBudget();
+
+            // Reset the form
+            expenseForm.reset();
+        });
+        // Function to remove an expense entry
+        function removeExpense(item) {
+            const index = expenseData.labels.indexOf(item);
+            if (index > -1) {
+                expenseData.labels.splice(index, 1);
+                expenseData.datasets[0].data.splice(index, 1);
+                expenseData.datasets[0].backgroundColor.splice(index, 1);
+                expenseChart.update();
+                checkBudget();
+            }
+        }
+        // Predefined list of colors
+        const usedColors = [];
+        const colors = [
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', 
+            '#FF9F40', '#E7E9ED', '#7AC36A', '#B6B6B6', '#F7D037',
+            '#6A5ACD', '#FF4500', '#1E90FF', '#32CD32', '#FFD700'
+        ];
+        // Function to get a unique color
+        function getUniqueColor() {
+            if (usedColors.length === colors.length) {
+                usedColors.length = 0; // Reset used colors if all are used
+            }
+
+            let color;
+            do {
+                color = colors[Math.floor(Math.random() * colors.length)];
+            } while (usedColors.includes(color));
+
+            usedColors.push(color);
+            return color;
+        }
+
+        // Selecting chatbot elements
+        const chatbotForm = document.getElementById('chatbotForm');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotMessages = document.getElementById('chatbot-messages');
+        const clearChatBtn = document.getElementById('clearChatBtn');
+        // Event listener for the chatbot form
+        chatbotForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userMessage = chatbotInput.value;
+            addMessage('user', userMessage);
+            provideTip();
+            chatbotInput.value = '';
+        });
+        // Event listener for the clear chat button
+        clearChatBtn.addEventListener('click', function() {
+            chatbotMessages.innerHTML = '';
+        });
+        // Function to add a message to the chatbot
+        function addMessage(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chatbot-message', sender);
+            messageElement.textContent = message;
+            chatbotMessages.appendChild(messageElement);
+        }
+        // List of tips for the chatbot
+        const tips = [
+            "Create a budget and stick to it.",
+            "Save at least 20% of your income.",
+            "Invest in a diversified portfolio.",
+            "Pay off high-interest debt first.",
+            "Keep an emergency fund of 3-6 months' expenses.",
+            "Review your expenses regularly and cut unnecessary costs.",
+            "Take advantage of employer retirement plans.",
+            "Avoid impulse purchases.",
+            "Set financial goals and track your progress.",
+            "Consult a financial advisor for personalized advice."
+        ];
+        // Function to provide a random tip
+        function provideTip() {
+            const randomIndex = Math.floor(Math.random() * tips.length);
+            const tip = tips.splice(randomIndex, 1)[0];
+            addMessage('bot', tip);
+        }
+        // Function to check the budget
+        function checkBudget() {
+            const totalExpenses = expenseData.datasets[0].data.reduce((sum, value) => sum + value, 0);
+            if (totalExpenses > monthlyBudget) {
+                addMessage('bot', `Warning: You have exceeded your budget by $${totalExpenses - monthlyBudget}.`);
+            } else {
+                addMessage('bot', `You have $${monthlyBudget - totalExpenses} remaining in your budget.`);
+            }
+        }
+    </script>
+</html>
+
+
+
+
+
+
+
+
